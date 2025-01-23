@@ -30,11 +30,11 @@
 
             <div class="d-flex flex gap-3">
               <select class="form-select" id="opciones-filtrar">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+                <option value="0" selected>Todo</option>
+                <option value="1">Beauty</option>
+                <option value="2">Fragrances</option>
+                <option value="3">Furniture</option>
+                <option value="4">Groceries</option>
               </select>
               <button class="btn btn-outline-primary" id="filtrar-btn">
                 Filtrar
@@ -44,7 +44,7 @@
               class="d-flex flex-row flex-wrap gap-5 justify-content-center mt-4"
               id="lista-de-productos"
             >
-              <div class="card" style="width: 18rem">
+              <!-- <div class="card h-100 w-50" style="width: 18rem">
                 <img
                   class="card-img-top"
                   src="img/product_placeholder.webp"
@@ -57,7 +57,7 @@
                     >Añadir al carrito</a
                   >
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
           <div class="col-5">
@@ -65,10 +65,8 @@
             <!-- <div></div> productos añadidos a la cesta -->
 
             <div id="card-horizontal-deck">
-              <div
-                class="card d-flex justify-content-around flex-row align-items-center bg-white my-3 py-2 align-items-center card-basket"
-              >
-                <img
+             
+                <!-- <img
                   src="img/product_placeholder.webp"
                   class="card-img-left img-thumbnail"
                   style="width: 100px"
@@ -76,15 +74,26 @@
                 <div class="d-flex flex-column">
                   <h5>Milkavid - Leche semidesnatada</h5>
                   <h6>1.99$</h6>
+                </div> -->
+
+                <div class="d-flex flex-column align-items-center" id="carrito-vacio">
+
+                  <div class="bg-info p-5 mt-4 d-flex flex-column align-items-center rounded-2 ">
+
+                    <i class="bi bi-basket2-fill" style="font-size: 5rem; color: rgb(255, 255, 255);"></i>
+                  <br>
+                  <h4 class="text-white">Su carrito está vacío!</h4>
+                  </div>
+
                 </div>
 
                 <!-- <button
                   class="rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
                 > -->
-                <i
+                <!-- <i
                   class="bi bi-trash3 fs-4 text-white bg-secondary rounded-circle d-flex justify-content-center align-items-center p-4 eliminar-btn"
                   style="width: 2rem; height: 2rem"
-                ></i>
+                ></i> -->
                 <!-- </button> -->
               </div>
             </div>

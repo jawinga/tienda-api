@@ -1,9 +1,8 @@
-let filtrarBtn = document.querySelector("#filtrar-btn");
-let opcionesFiltrar = document.querySelector("#opciones-filtrar");
 let precioTotal = document.querySelector("#precio-total");
 let comprarBtn = document.querySelector("#comprar-btn");
 let horizontalDeck = document.querySelector("#card-horizontal-deck");
 let listaDeProductos = document.querySelector("#lista-de-productos");
+let carritoVacio = document.querySelector("#carrito-vacio");
 
 fetch("https://dummyjson.com/products")
   .then((res) => res.json())
@@ -15,7 +14,7 @@ fetch("https://dummyjson.com/products")
   .then((data) => {
     data.products.forEach((element) => {
       let nuevoProducto = document.createElement("div");
-      nuevoProducto.innerHTML = `<div class="card" style="width: 18rem">
+      nuevoProducto.innerHTML = `<div class="card h-100 w-40 ${element.category}" style="width: 18rem">
                 <img
                   class="card-img-top"
                   src="${element.images[0]}"  // Use the first image
@@ -37,9 +36,12 @@ fetch("https://dummyjson.com/products")
       listaDeProductos.appendChild(nuevoProducto);
     });
 
+    // Añadir producto al carrito
+
     listaDeProductos.addEventListener("click", (e) => {
       let boton = e.target;
       if (boton.matches(".add-to-card")) {
+        carritoVacio.remove();
         let card = e.target.closest(".card");
 
         if (card) {
@@ -69,9 +71,48 @@ fetch("https://dummyjson.com/products")
         }
       }
     });
-  })
 
-  // Añadir producto al carrito
+    let card = horizontalDeck.querySelector(".card");
+
+    if (card) {
+      console.log("A card is in the deck!");
+    } else {
+      console.log("No cards in the deck");
+    }
+
+    //Filtrar
+
+    let filtrarBtn = document.querySelector("#filtrar-btn");
+    let opcionesFiltrar = document.querySelector("#opciones-filtrar");
+    let cartas = document.querySelectorAll(".card");
+
+    filtrarBtn.addEventListener("click", (e) => {
+      let filtro = parseInt(opcionesFiltrar.value, 10);
+      let cartas = document.querySelectorAll(".card");
+
+      cartas.forEach((element) => {
+        if (filtro === 1) {
+          containsCard(element, "beauty");
+        } else if (filtro === 2) {
+          containsCard(element, "fragrances");
+        } else if (filtro === 3) {
+          containsCard(element, "furniture");
+        } else if (filtro === 4) {
+          containsCard(element, "groceries");
+        } else {
+          element.classList.remove("hidden");
+        }
+      });
+    });
+
+    function containsCard(element, type) {
+      if (!element.classList.contains(type)) {
+        element.classList.add("hidden");
+      } else {
+        element.classList.remove("hidden");
+      }
+    }
+  })
 
   .catch((error) => console.error("Error fetching data:", error))
   .finally(() => console.log("El proceso ha acabado."));
@@ -82,6 +123,46 @@ horizontalDeck.addEventListener("click", (e) => {
     let eliminar = e.target.closest(".card");
     if (eliminar) {
       eliminar.remove();
+
+      let card = horizontalDeck.querySelector(".card");
+
+      if (card) {
+        console.log("A card is in the deck!");
+      } else {
+        console.log("No cards in the deck");
+
+        horizontalDeck.innerHTML = `<div class="d-flex flex-column align-items-center" id="carrito-vacio">
+
+                  <div class="bg-info p-5 mt-4 d-flex flex-column align-items-center rounded-2 ">
+
+                    <i class="bi bi-basket2-fill" style="font-size: 5rem; color: rgb(255, 255, 255);"></i>
+                  <br>
+                  <h4 class="text-white">Su carrito está vacío!</h4>
+                  </div>
+
+                </div>`;
+      }
     }
   }
 });
+
+// filtrarBtn.addEventListener("click", (e) => {
+//   let filtro = opcionesFiltrar.value;
+
+//   if (filtro === 1) {
+//     cartas.forEach((carta) => {
+//       if (!carta.classList.contains("beauty")) {
+//         console.log("Este producto es de beauty");
+//         carta.remove();
+//       } else {
+//         console.log("Este producto no es de beauty");
+//       }
+//     });
+
+//     // } else if (filtro === 2) {
+//     // } else if (filtro === 3) {
+//     // } else if (filtro === 4) {
+//     // } else {
+//     // }
+//   }
+// });
