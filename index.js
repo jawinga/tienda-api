@@ -3,12 +3,13 @@ let comprarBtn = document.querySelector("#comprar-btn");
 let horizontalDeck = document.querySelector("#card-horizontal-deck");
 let listaDeProductos = document.querySelector("#lista-de-productos");
 let carritoVacio = document.querySelector("#carrito-vacio");
+let preciosInd = horizontalDeck.querySelectorAll(".price");
 
 fetch("https://dummyjson.com/products")
   .then((res) => res.json())
   .then(console.log);
 
-//Añadir productos dinámicamente
+//Añadir productos dinámicamente y filtrar
 fetch("https://dummyjson.com/products")
   .then((res) => res.json())
   .then((data) => {
@@ -38,6 +39,8 @@ fetch("https://dummyjson.com/products")
 
     // Añadir producto al carrito
 
+    let totalPrecioConsola = 0;
+
     listaDeProductos.addEventListener("click", (e) => {
       let boton = e.target;
       if (boton.matches(".add-to-card")) {
@@ -60,7 +63,7 @@ fetch("https://dummyjson.com/products")
                         />
                         <div class="d-flex flex-column">
                           <h5>${title}</h5>
-                          <h6>${price}</h6>
+                          <h6 class="price">${price}</h6>
                         </div>
                         <i
                           class="bi bi-trash3 fs-4 text-white bg-secondary rounded-circle d-flex justify-content-center align-items-center p-4 eliminar-btn"
@@ -68,6 +71,18 @@ fetch("https://dummyjson.com/products")
                         ></i>
                       </div>`;
           horizontalDeck.appendChild(newCard);
+          Swal.fire({
+            title: `${title} se ha añadido!`,
+            icon: "success",
+            draggable: true,
+          });
+
+          console.log(price);
+          totalPrecioConsola += Number(price);
+          console.log(
+            "El precio total ahora es de " + totalPrecioConsola.toFixed(2)
+          );
+          precioTotal.innerText = `${totalPrecioConsola}`;
         }
       }
     });
@@ -84,11 +99,10 @@ fetch("https://dummyjson.com/products")
 
     let filtrarBtn = document.querySelector("#filtrar-btn");
     let opcionesFiltrar = document.querySelector("#opciones-filtrar");
-    let cartas = document.querySelectorAll(".card");
 
     filtrarBtn.addEventListener("click", (e) => {
       let filtro = parseInt(opcionesFiltrar.value, 10);
-      let cartas = document.querySelectorAll(".card");
+      let cartas = listaDeProductos.querySelectorAll(".card");
 
       cartas.forEach((element) => {
         if (filtro === 1) {
@@ -146,23 +160,21 @@ horizontalDeck.addEventListener("click", (e) => {
   }
 });
 
-// filtrarBtn.addEventListener("click", (e) => {
-//   let filtro = opcionesFiltrar.value;
-
-//   if (filtro === 1) {
-//     cartas.forEach((carta) => {
-//       if (!carta.classList.contains("beauty")) {
-//         console.log("Este producto es de beauty");
-//         carta.remove();
-//       } else {
-//         console.log("Este producto no es de beauty");
-//       }
-//     });
-
-//     // } else if (filtro === 2) {
-//     // } else if (filtro === 3) {
-//     // } else if (filtro === 4) {
-//     // } else {
-//     // }
-//   }
-// });
+comprarBtn.addEventListener("click", (e) => {
+  Swal.fire({
+    title: "¿Quiere confirmar la compra?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sí, comprar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Comprado!",
+        text: "Ha realizado su pago",
+        icon: "success",
+      });
+    }
+  });
+});
