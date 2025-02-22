@@ -9,7 +9,6 @@ fetch("https://dummyjson.com/products")
   .then((res) => res.json())
   .then(console.log);
 
-//Añadir productos dinámicamente y filtrar
 fetch("https://dummyjson.com/products")
   .then((res) => res.json())
   .then((data) => {
@@ -29,15 +28,13 @@ fetch("https://dummyjson.com/products")
                   <a href="#" data-title = "${element.title}" 
                   data-price = "${element.price}"
                   data-image = "${element.images[0]}"
-                  class="btn btn-primary add-to-card"
+                  class="btn btn-primary add-to-card aniadirProducto"
                     >Añadir al carrito</a
                   >
                 </div>
               </div>`;
       listaDeProductos.appendChild(nuevoProducto);
     });
-
-    // Añadir producto al carrito
 
     let totalPrecioConsola = 0;
 
@@ -63,7 +60,7 @@ fetch("https://dummyjson.com/products")
                         />
                         <div class="d-flex flex-column">
                           <h5>${title}</h5>
-                          <h6 class="price">${price}</h6>
+                          <h6 class="price precioProducto">${price}</h6>
                         </div>
                         <i
                           class="bi bi-trash3 fs-4 text-white bg-secondary rounded-circle d-flex justify-content-center align-items-center p-4 eliminar-btn"
@@ -84,6 +81,8 @@ fetch("https://dummyjson.com/products")
           );
           precioTotal.innerText = `${totalPrecioConsola}`;
         }
+
+        sumarTotal();
       }
     });
 
@@ -94,8 +93,6 @@ fetch("https://dummyjson.com/products")
     } else {
       console.log("No cards in the deck");
     }
-
-    //Filtrar
 
     let filtrarBtn = document.querySelector("#filtrar-btn");
     let opcionesFiltrar = document.querySelector("#opciones-filtrar");
@@ -131,7 +128,6 @@ fetch("https://dummyjson.com/products")
   .catch((error) => console.error("Error fetching data:", error))
   .finally(() => console.log("El proceso ha acabado."));
 
-//Eliminar productos de la cesta dinamicamente
 horizontalDeck.addEventListener("click", (e) => {
   if (e.target.matches(".eliminar-btn")) {
     let eliminar = e.target.closest(".card");
@@ -139,6 +135,7 @@ horizontalDeck.addEventListener("click", (e) => {
       eliminar.remove();
 
       let card = horizontalDeck.querySelector(".card");
+      sumarTotal();
 
       if (card) {
         console.log("A card is in the deck!");
@@ -175,6 +172,35 @@ comprarBtn.addEventListener("click", (e) => {
         text: "Ha realizado su pago",
         icon: "success",
       });
+      horizontalDeck.innerHTML = "";
+      precioTotal.innerText = "0.00";
+      carritoVacio.innerHTML = `<div class="d-flex flex-column align-items-center" id="carrito-vacio">
+
+                  <div class="bg-info p-5 mt-4 d-flex flex-column align-items-center rounded-2 ">
+
+                    <i class="bi bi-basket2-fill" style="font-size: 5rem; color: rgb(255, 255, 255);"></i>
+                  <br>
+                  <h4 class="text-black">Su carrito está vacío!</h4>
+                  </div>;
+                  </div>`;
     }
   });
 });
+
+function sumarTotal() {
+  let precioTotal = document.querySelector("#precio-total");
+  let precioProducto = document.querySelectorAll(".precioProducto");
+
+  let total = 0;
+
+  precioProducto.forEach((element) => {
+    let priceText = element.textContent.trim();
+    let price = parseFloat(priceText.replace(/[^0-9.]/g, ""));
+
+    if (!isNaN(price)) {
+      total += price;
+    }
+  });
+
+  precioTotal.innerText = total.toFixed(2);
+}
